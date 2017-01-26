@@ -3,10 +3,6 @@ title: "README"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 # Open data science
 
 *This the README.Rmd for Open Data Science course repository in Github*
