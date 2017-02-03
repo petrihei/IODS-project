@@ -9,6 +9,7 @@
 # Access the dplyr and ggplot2 libraries
 library(dplyr)
 library(ggplot2)
+library(GGally)
 
 # Read data from URL
 
@@ -23,14 +24,12 @@ str(my_data)
 ```
 -The result shows that the data has 166 rows and 7 variables. Seems as intended.
 
--Next, I did some prelimary visualizations just to get understanding of the data
+-Next, I did summary visualizations just to get understanding of the data
 
 ```{r}
-# initialize plot with data and aesthetic mapping
-p1 <- ggplot(my_data, aes(x = age, y = points, col = gender))
+# create advanced plot matrix with ggpairs()
+p <- ggpairs(learning2014, mapping = aes(col=gender), lower = list(combo = wrap("facethist", bins = 20)))
 
-# define the visualization type (points)
-p2 <- p1 + geom_point()
-
-p2
+# draw the plot
+p
 ```

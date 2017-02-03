@@ -5,6 +5,8 @@
 # Access the dplyr and ggplot2 libraries
 library(dplyr)
 library(ggplot2)
+library(GGally)
+
 
 # Read data from URL
 
@@ -14,8 +16,13 @@ dim(my_data)
 
 str(my_data)
 
-# initialize plot with data and aesthetic mapping
-p1 <- ggplot(my_data, aes(x = age, y = points, col = gender))
 
-# define the visualization type (points)
-p2 <- p1 + geom_point()
+# access the GGally and ggplot2 libraries
+library(GGally)
+library(ggplot2)
+
+# create advanced plot matrix with ggpairs()
+p <- ggpairs(learning2014, mapping = aes(col=gender), lower = list(combo = wrap("facethist", bins = 20)))
+
+# draw the plot
+p
