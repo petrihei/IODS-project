@@ -2,7 +2,7 @@
 
 *Second week, I did the data wrangling exercise and build small regression analysis on given data.*
 
-- First, I imported the libraries and got data from URL to data frame
+First, I imported the libraries and got data from URL to data frame
 
 ```{r}
 
@@ -22,9 +22,9 @@ dim(my_data)
 str(my_data)
 
 ```
--The result shows that the data has 166 rows and 7 variables. Seems as intended.
+The result shows that the data has 166 rows and 7 variables. Seems as intended.
 
--Next I did summary visualizations just to get understanding of the data
+Next I did summary visualizations just to get understanding of the data
 
 ```{r}
 # create advanced plot matrix with ggpairs()
@@ -33,3 +33,57 @@ p <- ggpairs(my_data, mapping = aes(col=gender), lower = list(combo = wrap("face
 # draw the plot
 p
 ```
+
+Deep, strat and surf are close to normally distributed.
+
+Age seems far from normally distributed, which is easy to understand because most of the students are young.
+
+Differences between genders seem small.
+
+Highest correlation with points is in attitude (0.437), stra (0.146) and surf (-1.44)
+
+For regression model, I chose attitude, stra and age
+
+```{r}
+
+# create a regression model with multiple explanatory variables
+my_model <- lm(points ~ attitude + stra + age, data = my_data)
+
+# print out a summary of the model
+summary(my_model)
+```
+Seems like only variable having statistical significance is attitude (p<0.001)
+
+Let's try simple regression with only attitude variable
+
+```{r}
+# fit a linear model
+my_model2 <- lm(points ~ attitude, data = my_data)
+
+# print out a summary of the model
+summary(my_model2)
+
+```
+Model is statistically significant (p<0.001)
+
+Alfa has a value 11.6 and increase of one in attitude seems to increase points by 3.5
+
+Multiple R-squared is 0.19 which means that attitude explains roughly one fifth of the changes in points
+
+The main conclusion is that differences in attitude explain quite well the difference in course grade (points)
+
+The last thing is to draw few diagnostic plots:
+
+```{r}
+# draw diagnostic plots using the plot() function. Choose the plots 1, 2 and 5 (Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage)
+par(mfrow = c(2,2))
+plot(my_model2, which = c(1, 2, 5))
+```
+
+Most of the residuals seem small
+
+Observations follow the regression line nicely
+
+There is no single observation that would draw the regression line heavily in some direction
+
+Everything seems fine

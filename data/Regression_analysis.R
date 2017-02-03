@@ -26,3 +26,19 @@ p <- ggpairs(learning2014, mapping = aes(col=gender), lower = list(combo = wrap(
 
 # draw the plot
 p
+
+# create a regression model with multiple explanatory variables
+my_model <- lm(points ~ attitude + stra + age, data = my_data)
+
+# print out a summary of the model
+summary(my_model)
+
+# fit a linear model
+my_model2 <- lm(points ~ attitude, data = my_data)
+
+# print out a summary of the model
+summary(my_model2)
+
+# draw diagnostic plots using the plot() function. Choose the plots 1, 2 and 5 (Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage)
+par(mfrow = c(2,2))
+plot(my_model2, which = c(1, 2, 5))
