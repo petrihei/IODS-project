@@ -28,7 +28,7 @@ str(my_data)
 
 ```{r}
 # create advanced plot matrix with ggpairs()
-p <- ggpairs(learning2014, mapping = aes(col=gender), lower = list(combo = wrap("facethist", bins = 20)))
+p <- ggpairs(my_data, mapping = aes(col=gender), lower = list(combo = wrap("facethist", bins = 20)))
 
 # draw the plot
 p
