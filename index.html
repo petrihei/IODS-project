@@ -193,7 +193,7 @@ dim(my_data)</code></pre>
 ##  $ surf    : num  2.58 3.17 2.25 2.25 2.83 ...
 ##  $ points  : int  25 12 24 10 22 21 21 31 24 26 ...</code></pre>
 <p>-The result shows that the data has 166 rows and 7 variables. Seems as intended.</p>
-<p>-Next, I did summary visualizations just to get understanding of the data</p>
+<p>-Next I did summary visualizations just to get understanding of the data</p>
 <pre class="r"><code># create advanced plot matrix with ggpairs()
 p &lt;- ggpairs(my_data, mapping = aes(col=gender), lower = list(combo = wrap(&quot;facethist&quot;, bins = 20)))
 

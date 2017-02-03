@@ -24,7 +24,7 @@ str(my_data)
 ```
 -The result shows that the data has 166 rows and 7 variables. Seems as intended.
 
--Next, I did summary visualizations just to get understanding of the data
+-Next I did summary visualizations just to get understanding of the data
 
 ```{r}
 # create advanced plot matrix with ggpairs()
