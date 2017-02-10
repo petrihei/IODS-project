@@ -1,0 +1,28 @@
+---
+title: "chapter3"
+author: "Petri Heinonen"
+date: "2/10/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Logistic regression
+
+This is the third chapter including logistic regression analysis.
+
+
+First, I read the data from URL and explored basic structure and dimensions
+```{r}
+# Read data from URL
+
+alc <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/alc.txt", sep=",", header=TRUE)
+
+str(alc)
+dim(alc)
+
+```
+The data has 382 rows and 35 variables
+Variables are integers, factors and one is boolean statement
