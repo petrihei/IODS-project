@@ -5,11 +5,8 @@ date: "2/10/2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-## Logistic regression
+# Logistic regression
 
 This is the third chapter including logistic regression analysis.
 
