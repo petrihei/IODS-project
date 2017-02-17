@@ -1,0 +1,187 @@
+---
+title: "chapter4"
+author: "Petri Heinonen"
+date: "2/17/2017"
+output: html_document
+---
+
+# Clustering and classification
+
+
+First I'll load the Boston dataset and explore some basics.
+
+Data has 506 observations and 14 variables. All seem to be numeric or integers.
+
+```{r}
+# access the MASS package
+library(MASS)
+library(corrplot)
+
+# load the data
+data(Boston)
+
+# explore the dataset
+str(Boston)
+summary(Boston)
+```
+
+Next, I'll check the data graphically with plot and correlation matrixes.
+
+Plot matrix doesn't say much to me, but correlation matrix has some interesting information. Seems that rad, tax, nox and indus have the highest correlation with crime.
+
+```{r}
+# plot matrix of the variables
+pairs(Boston)
+
+# calculate the correlation matrix and round it
+cor_matrix<-cor(Boston) 
+cor_matrix
+# print the correlation matrix
+cor_matrix
+
+# visualize the correlation matrix
+corrplot(cor_matrix, method="circle", type="upper", cl.pos = "b", tl.pos = "d", tl.cex = 0.6)
+```
+
+Next step is to standardize the dataset to enable better comparison between variables.
+
+After that all variables have mean zero.
+
+I'll also make it dataframe again.
+
+```{r}
+# center and standardize variables
+boston_scaled <- scale(Boston)
+
+# summaries of the scaled variables
+summary(boston_scaled)
+
+# class of the boston_scaled object
+class(boston_scaled)
+
+# change the object to data frame
+boston_scaled <- as.data.frame(boston_scaled)
+```
+
+Next, I'll create categorial variable from crime and set the test and training sets.
+```{r}
+
+# save the scaled crim as scaled_crim
+scaled_crim <- boston_scaled$crim
+
+# summary of the scaled_crim
+summary(scaled_crim)
+
+# create a quantile vector of scaled_crim and print it
+bins <- quantile(scaled_crim)
+bins
+
+# create a categorical variable 'crime'
+crime <- cut(scaled_crim, breaks = bins, include.lowest = TRUE, labels = c("low", "med_low", "med_high", "high"))
+
+# look at the table of the new factor crime
+table(crime)
+
+# remove original crim from the dataset
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+
+# add the new categorical value to scaled data
+boston_scaled <- data.frame(boston_scaled, crime)
+
+# number of rows in the Boston dataset 
+n <- nrow(boston_scaled)
+
+# choose randomly 80% of the rows
+ind <- sample(n,  size = n * 0.8)
+
+# create train set
+train <- boston_scaled[ind,]
+train
+
+# create test set 
+test <- boston_scaled[-ind,]
+test
+# save the correct classes from test data
+correct_classes <- test$crime
+
+# remove the crime variable from test data
+test <- dplyr::select(test, -crime)
+```
+
+Next, I'll execute linear discriminant analysis with the data and draw some plots.
+
+```{r}
+# linear discriminant analysis
+lda.fit <- lda(crime ~ ., data = train)
+
+# print the lda.fit object
+lda.fit
+
+# the function for lda biplot arrows
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "orange", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+# target classes as numeric
+classes <- as.numeric(train$crime)
+
+# plot the lda results
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 1)
+
+```
+Plot shows that predictor variable rad has a large impact on the model.
+
+Next, I'll do predictions based on test data.
+
+```{r}
+# predict classes with test data
+lda.pred <- predict(lda.fit, newdata = test)
+
+# cross tabulate the results
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+Cross tabulation shows that model predicted quite well. Especially, it got high values right.
+
+As a last thing I'll load and scale the Boston data again. After that, I'll do some k-means clustering.
+
+I don't have a clue of how to pick the right number of clusters, but five sounds fine to me.
+
+```{r}
+
+# load the data
+data(Boston)
+
+# center and standardize variables
+boston_scaled <- scale(Boston)
+
+# summaries of the scaled variables
+summary(boston_scaled)
+
+# class of the boston_scaled object
+class(boston_scaled)
+
+# change the object to data frame
+boston_scaled <- as.data.frame(boston_scaled)
+
+# euclidean distance matrix
+dist_eu <- dist(boston_scaled)
+
+# look at the summary of the distances
+summary(dist_eu)
+
+# k-means clustering
+km <-kmeans(dist_eu, centers = 5)
+
+# plot the Boston dataset with clusters
+pairs(Boston, col = km$cluster)
+
+```
+
+Interesting visualization. Not able to say much about it.
