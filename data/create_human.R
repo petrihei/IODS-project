@@ -61,3 +61,49 @@ colnames(hd_gii)
 glimpse(hd_gii)
 
 # Combined dataset has 195 observations and 19 variable = correct!
+
+
+
+# Data wrangling continues______________________
+
+# GNI as numeric
+
+as.numeric(hd_gii$gni_per_capita)
+
+# Exclude unnecessary variables
+
+# columns to keep
+keep <- c("country", "sec_edu_ratio", "labour_ratio", "life_exp", "edu_years", "gni_per_capita", "mat_mort_ratio", "birth_rate", "parlament")
+
+# select the 'keep' columns
+hd_gii <- select(hd_gii, one_of(keep))
+
+# print out a completeness indicator of the 'human' data
+complete.cases(hd_gii)
+
+# print out the data along with a completeness indicator as the last column
+data.frame(hd_gii[-1], comp = complete.cases(hd_gii))
+
+# filter out all rows with NA values
+hd_gii_ <- filter(hd_gii, complete.cases(hd_gii))
+
+# remove the Country variable
+
+
+# define the last indice we want to keep
+last <- nrow(hd_gii_) - 7
+
+# choose everything until the last 7 observations
+hd_gii_ <- hd_gii_[1:last,]
+
+# add countries as rownames
+
+rownames(hd_gii_) <- hd_gii_$country
+
+hd_gii_ <- select(hd_gii_, -country)
+
+# Write the file
+
+write.csv(hd_gii_, "human.csv", row.names = TRUE)
+
+
